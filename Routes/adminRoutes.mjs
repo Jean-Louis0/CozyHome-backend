@@ -1,5 +1,4 @@
 import express, { json} from 'express'
-import authenticateToken from '../config/Authenticateuser.mjs'
 import { registerAdminController, loginAdminController, updateCredentialsController} from '../Controllers/adminController.mjs'
 
 const router = express.Router()
