@@ -1,21 +1,24 @@
 import jwt from 'jsonwebtoken'
 
-const jwtSecret = process.env.SECRET_KEY
-
 const authenticateToken = (req, res, next) => {
-    const token = req.headers.authorization
+  const authHeader = req.headers["authorization"];
+  console.log(process.env.SECRET_KEY);
 
-    if(!token) {
-        return res.status(401).json({message: 'Unauthorized' })
-    }
+  if (!authHeader) 
+  return res.status(403).json({ message: "Token missing. Access denied." });
+  
 
-    jwt.verify(token, jwtSecret, (err, user) => {
-        if(err) {
-            return res.status(403).json({message: 'Forbidden' })
-        }
-        req.user = user
-        next()
-    })
-}
+  console.log(authHeader); // Bearer token
+  const token = authHeader.split(" ")[1];
+
+  jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+    console.log("verifying");
+    if (err) return res.status(403).json( { message: 'Invalid Token'});
+    req.user = decoded
+    console.log(decoded); //for correct token
+
+    next();
+  });
+};
 
 export default authenticateToken
