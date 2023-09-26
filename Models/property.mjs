@@ -3,7 +3,7 @@ import conn from '../config/DB.mjs'
 /*-------------------------------------------------- View property details by property ID ---------------------------------------------------------------------------*/
 const viewProperty = async (propertyid) => {
     try {
-        const query = 'SELECT (location, name, description, price, property_type, number_of_rooms) FROM property WHERE propertyid = $1;'
+        const query = 'SELECT (location, name, description, price, property_type, number_of_rooms) FROM property WHERE propertyid = $1'
         const values = [propertyid]
         const result = await conn.query(query, values)
 
@@ -18,20 +18,21 @@ const viewProperty = async (propertyid) => {
     }
 }
 
-/*----------------------------------------------------------------- Add a new property ----------------------------------------------------------------------------------------*/
-const addProperty = async(location, name, description, price, property_type, number_of_rooms, images) => {
+/*---------------------------------------------- Add a new property ----------------------------------------------------------------------------------------*/
+const addProperty = async(location, name, description, price, adminid, property_type, number_of_rooms, images) => {
     try{
-        const propertyquery = 'INSERT INTO property (location, name, description, price, property_type, number_of_rooms) VALUES ($1, $2, $3, $4, $5, $6) RETURNING propertyid'
-        const propertyvalues = [location, name, description, price, property_type, number_of_rooms]
+        const propertyquery = 'INSERT INTO property (location, name, description, price, adminid, property_type, number_of_rooms) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING propertyid'
+        const propertyvalues = [location, name, description, price, adminid, property_type, number_of_rooms]
         const propertyresult = await conn.query(propertyquery, propertyvalues)
         const propertyid = propertyresult.rows[0].propertyid
         
         //insert property images into propertyimg table
-        const imagequery = 'INSERT INTO propertyimg (image_data) VALUES($1);'
+        const imagequery = 'INSERT INTO propertyimg (propertyid, image_data) VALUES ($1, $2);'
         for(const imageData of images) {
-            await conn.query(imagequery, imageData)
+            await conn.query(imagequery, [propertyid, imageData])
         }
-        if (result.rowCount === 1) {
+        if (propertyresult.rowCount === 1) {
+            
             return { propertyid }
         }
         else {
@@ -53,19 +54,22 @@ const updateProperty = async(propertyid, location, name, description, price, num
                 name = $3,
                 description = $4,
                 price = $5,
-                number_of_rooms =$6
-            WHERE propertyid = $1';`
+                number_of_rooms = $6
+            WHERE propertyid = $1;`
         const updatePropertyvalues  = [propertyid, location, name, description, price, number_of_rooms]
         const updatePropertyresult = await conn.query(updatePropertyquery, updatePropertyvalues)
 
-        const updateproperty = updatePropertyresult.rows[0].propertyid
-        const imagequery = `UPDATE property
+        if (updatePropertyresult.rowCount === 0) {
+            // Property not found or not updated
+            return null;
+        }
+        const imagequery = `UPDATE propertyimg
             SET image_data = $2 WHERE propertyid = $1;`
             
             for (const imageData of images) {
-                await conn.query(imagequery, imageData)
+                await conn.query(imagequery, [propertyid, imageData])
             }
-            return { updateproperty }
+            return { propertyid }
     }
     
     catch(error) {
@@ -74,17 +78,30 @@ const updateProperty = async(propertyid, location, name, description, price, num
 }
 
 /*-------------------------------------- delete admin's property --------------------------------------*/
-const deleteProperty = async(propertyid) => {
+const deleteProperty = async (propertyid) => {
     try {
-        const deletePropertyquery =  'DELETE FROM property WHERE propertyid = $1;'
-        await conn.query(deletePropertyquery, [propertyid])
+        // Delete property images first
+        const deleteImageQuery = 'DELETE FROM propertyimg WHERE propertyid = $1;';
+        await conn.query(deleteImageQuery, [propertyid]);
 
-        const deleteimagequery = 'DELETE FROM propertyimg WHERE imgid = $1;'
-        await conn.query(deleteimagequery, [propertyid])
-
+        // Then delete the property
+        const deletePropertyQuery = 'DELETE FROM property WHERE propertyid = $1;';
+        await conn.query(deletePropertyQuery, [propertyid]);
+    } catch (error) {
+        throw error;
     }
-    catch(error) {
-        throw error
+}
+
+
+/*-------------------------------- view all properties --------------------------------*/
+const viewAllProperties = async () => {
+    try {
+        const query = 'SELECT location, name, description, price, property_type, number_of_rooms FROM property';
+        const result = await conn.query(query);
+
+        return result.rows;
+    } catch (error) {
+        throw error;
     }
 }
 
@@ -111,5 +128,6 @@ export {
     addProperty,
     updateProperty,
     deleteProperty,
+    viewAllProperties,
     viewrentaldetails
 }

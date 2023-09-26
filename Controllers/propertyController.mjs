@@ -1,4 +1,4 @@
-import { viewProperty, addProperty, updateProperty, deleteProperty } from "../Models/property.mjs"
+import { viewProperty, viewAllProperties, addProperty, updateProperty, deleteProperty, viewrentaldetails } from "../Models/property.mjs"
 import authenticateToken from "../config/Authenticateuser.mjs"
 
 /*-------------------------- View property details by property ID -----------------------------*/
@@ -18,6 +18,22 @@ const getPropertyDetails = async(req, res) => {
     }
 }
 
+/*-------------------------- View all properties -----------------------------*/
+const getAllProperties = async (req, res) => {
+    try {
+        const properties = await viewAllProperties()
+
+        if (!properties) {
+            return res.status(404).json({ message: 'No properties found' })
+        }
+
+        res.status(200).json({ properties })
+    } catch (error) {
+        console.error('Error in getting all properties:', error)
+        res.status(500).json({ message: 'Internal server error' })
+    }
+}
+
 /*-------------------------- Add a property -----------------------------*/
 const addNewProperty = async(req, res) => {
     try{
@@ -26,11 +42,12 @@ const addNewProperty = async(req, res) => {
         const { adminid } = req.user
 
         //add the property
-        const property = await addProperty(location, name, description, price, property_type, number_of_rooms, images)
+        const property = await addProperty(location, name, description, price, adminid, property_type, number_of_rooms, images)
 
         if(!property) {
             return res.status(500).json({ message: 'Failed to add property' })
         }
+        return res.json({ message: 'Added property' })   
     }
     catch(error){
         console.error('Error in adding property:', error)
@@ -49,6 +66,7 @@ const updatePropertydetails = async(req, res) => {
 
         //update the property
         const updatedProperty = await updateProperty(
+            propertyid,
             name,
             location,
             description, 
@@ -60,7 +78,8 @@ const updatePropertydetails = async(req, res) => {
             return res.status(500).json({ message: 'Failed to update property' })
         }
 
-        res.status(200).json({ updatedProperty })
+        res.status(200).json({ updatedProperty, message: 'property updated' });
+
     }
     catch (error) {
         console.error('Error in updating property details:', error)
@@ -68,28 +87,49 @@ const updatePropertydetails = async(req, res) => {
     }
 }
 
-/*-------------------------- Delete a property -----------------------------*/
-const deletePropertyById = async(req, res) => {
+
+/*-------------------------------------- delete admin's property --------------------------------------*/
+const deletePropertyById = async (req, res) => {
     try {
-        const { propertyid } = req.params
+        const { propertyid } = req.params;
 
-        //check authentication token
-        const { adminid } =req.user
+        // Check authentication token
+        const { adminid } = req.user;
 
-        //Delete the property
-        await deleteProperty(propertyid)
+        // Delete the property and related images
+        await deleteProperty(propertyid);
 
-        res.status(204).send()
+        res.status(204).json({ message: 'Property deleted' });
+    } catch (error) {
+        console.error('Error in deleting property:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
-    catch (error) {
-        console.error('Error in deleting property:', error)
-        res.status(500).json({ message: 'Internal Server Error' })
+}
+
+/*-------------------------- View property and rental details -----------------------------*/
+const viewPropertyAndRentalDetails = async (req, res) => {
+    try {
+        // Check authentication token
+        const { adminid } = req.user;
+        
+        const propertiesAndRentalDetails = await viewrentaldetails(adminid);
+        
+        if (!propertiesAndRentalDetails) {
+            return res.status(404).json({ message: 'The property has not yet been rented.' });
+        }
+
+        res.status(200).json({ propertiesAndRentalDetails });
+    } catch (error) {
+        console.error('Error in getting property and rental details:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 }
 
 export {
     getPropertyDetails,
+    getAllProperties,
     addNewProperty,
     updatePropertydetails,
-    deletePropertyById
+    deletePropertyById,
+    viewPropertyAndRentalDetails
 }
