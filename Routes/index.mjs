@@ -4,11 +4,11 @@ const router = express()
 
 
 /*------------------------------------------------ for Admin routes ----------------------------------------------*/
-import adminRoutes from './adminRoutes.mjs'
-router.use('/admin', adminRoutes)
+import adminRouter from './adminRoutes.mjs'
+router.use('/admin', adminRouter)
 
 /*------------------------------------------------ for property routes ----------------------------------------------*/
-import propertyRoutes from './propertyRoutes.mjs'
-router.use('/property', propertyRoutes)
+import propertyRouter from './propertyRoutes.mjs'
+router.use('/property', propertyRouter)
 
 export default router
