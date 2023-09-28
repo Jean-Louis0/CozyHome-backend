@@ -21,13 +21,13 @@ const viewProperty = async (propertyid) => {
 /*---------------------------------------------- Add a new property ----------------------------------------------------------------------------------------*/
 const addProperty = async(location, name, description, price, adminid, property_type, number_of_rooms, images) => {
     try{
-        const propertyquery = 'INSERT INTO property (location, name, description, price, adminid, property_type, number_of_rooms) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING propertyid'
-        const propertyvalues = [location, name, description, price, adminid, property_type, number_of_rooms]
+        const propertyquery = 'INSERT INTO property (location, name, description, price, property_type, number_of_rooms, adminid) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING propertyid'
+        const propertyvalues = [location, name, description, price, property_type, number_of_rooms, adminid]
         const propertyresult = await conn.query(propertyquery, propertyvalues)
         const propertyid = propertyresult.rows[0].propertyid
         
         //insert property images into propertyimg table
-        const imagequery = 'INSERT INTO propertyimg (propertyid, image_data) VALUES ($1, $2);'
+        const imagequery = 'INSERT INTO propertyimg (propertyid, imgdata) VALUES ($1, $2);'
         for(const imageData of images) {
             await conn.query(imagequery, [propertyid, imageData])
         }
@@ -64,7 +64,7 @@ const updateProperty = async(propertyid, location, name, description, price, num
             return null;
         }
         const imagequery = `UPDATE propertyimg
-            SET image_data = $2 WHERE propertyid = $1;`
+            SET imgdata = $2 WHERE propertyid = $1;`
             
             for (const imageData of images) {
                 await conn.query(imagequery, [propertyid, imageData])
