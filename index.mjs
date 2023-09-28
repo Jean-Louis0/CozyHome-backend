@@ -17,8 +17,11 @@ app.use(bodyParser.urlencoded({ limit: "10mb", extended: false }))
 
 //frontend URL
 app.use(cors({
-  origin: ["https://cozyhome.onrender.com/", "http://localhost:3000"] 
-}))
+  origin: "https://cozyhome.onrender.com",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true // for Cookies and authentication headers
+}));
+
 
 
 app.listen(PORT, () => {
