@@ -16,11 +16,13 @@ app.use("/", indexRouter)
 app.use(bodyParser.urlencoded({ limit: "10mb", extended: false }))
 
 //frontend URL
-app.use(cors({
-  origin: "https://cozyhome.onrender.com",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true // for Cookies and authentication headers
-}));
+const corsOptions = {
+  origin: "*",
+  methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
+  Credentials: true,
+}
+
+app.use(cors(corsOptions))
 
 
 
