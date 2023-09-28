@@ -7,7 +7,7 @@ dotenv.config();
 const { Client } = pkg;
 
 const clientconfig = {
-    database: 'CozyHome',
+    database: 'cozy_home',
     host: 'dpg-ckaj3vcg66mc7382oghg-a',
     port: 5432,
     user: 'girishakapsql',
