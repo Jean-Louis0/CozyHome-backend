@@ -3,20 +3,34 @@ import conn from '../config/DB.mjs'
 /*-------------------------------------------------- View property details by property ID ---------------------------------------------------------------------------*/
 const viewProperty = async (propertyid) => {
     try {
-        const query = 'SELECT (location, name, description, price, property_type, number_of_rooms) FROM property WHERE propertyid = $1'
-        const values = [propertyid]
-        const result = await conn.query(query, values)
+        const query = `
+            SELECT p.location, p.name, p.description, p.price, p.property_type, p.number_of_rooms, pi.imgdata
+            FROM property p
+            LEFT JOIN propertyimg pi ON p.propertyid = pi.propertyid
+            WHERE p.propertyid = $1
+        `;
+        const values = [propertyid];
+        const result = await conn.query(query, values);
 
         if (result.rowCount === 1) {
-            return result.rows[0]
+            const propertyData = result.rows[0];
+            return {
+                location: propertyData.location,
+                name: propertyData.name,
+                description: propertyData.description,
+                price: propertyData.price,
+                property_type: propertyData.property_type,
+                number_of_rooms: propertyData.number_of_rooms,
+                images: propertyData.imgdata ? [propertyData.imgdata] : [], // Convert the image data to an array
+            };
         } else {
-            return null
+            return null;
         }
-    }
-    catch(error) {
+    } catch (error) {
         throw error;
     }
 }
+
 
 /*---------------------------------------------- Add a new property ----------------------------------------------------------------------------------------*/
 const addProperty = async(location, name, description, price, adminid, property_type, number_of_rooms, images) => {
