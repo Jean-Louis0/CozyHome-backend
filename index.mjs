@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ limit: "10mb", extended: false }))
 
 
 
-app.listen(port, () => {
+app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`)
   }
 )
