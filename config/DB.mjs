@@ -7,15 +7,16 @@ dotenv.config();
 const { Client } = pkg;
 
 const clientconfig = {
-    database: 'cozy_home',
-    host: 'dpg-ckaj3vcg66mc7382oghg-a',
-    port: 5432,
-    user: 'girishakapsql',
-    password: process.env.PASSWORD_POSTGRESQL
-};
+  database: 'cozy_home',
+  host: 'dpg-ckaj3vcg66mc7382oghg-a.oregon-postgres.render.com',
+  port: 5432,
+  user: 'girishakapsql',
+  password: process.env.PASSWORD_POSTGRESQL
+}
+
 
 // Create the PostgreSQL connection URL
-const connectionString = `postgres://${clientconfig.user}:${clientconfig.password}@${clientconfig.host}:${clientconfig.port}/${clientconfig.database}`;
+const connectionString = `postgres://${clientconfig.user}:${clientconfig.password}@${clientconfig.host}:${clientconfig.port}/${clientconfig.database}?ssl=true`;
 
 // Create a new PostgreSQL client with the connection URL
 const conn = new Client({
