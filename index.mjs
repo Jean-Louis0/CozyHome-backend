@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3200
 
 
 app.use(express.json())
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: false }))
 
 //frontend URL
 const corsOptions = {
@@ -18,14 +19,9 @@ const corsOptions = {
   methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
   Credentials: true,
 }
-
-app.use("/", indexRouter)
-app.use(bodyParser.urlencoded({ limit: "10mb", extended: false }))
-
-
-
 app.use(cors(corsOptions))
 
+app.use("/", indexRouter)
 
 
 app.listen(PORT, () => {
