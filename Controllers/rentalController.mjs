@@ -11,25 +11,20 @@ import authenticateToken from '../config/Authenticateuser.mjs'
 const createRentalcontroller = async(req, res) => {
     try{
         const { propertyid } = req.params
-        const { firstname, lastname, telephone, email } = req.body
+        const { firstname, lastname, telephone, email, fromdate, todate } = req.body
 
         //create the rental
-        const rentalid = await createRental(
-            propertyid,
-            firstname,
-            lastname,
-            telephone,
-            email
-        )
+        const rental = await createRental(firstname, lastname, telephone, email, fromdate, todate, propertyid)
 
-        if (!rentalid) {
-            return res.status(500).json({message: 'Failed to create rental' })
+        if (!rental) {
+            return res.status(500).json({ message: 'Failed to create rental. Database error.' })
         }
-        res.status(201).json({ rentalid })
+
+        res.status(201).json({ rental })
     }
     catch(error){
-        console.error('Error in creating rental:', error)
-        res.status(500).json({ message: 'Internal Server Error'})
+        console.error( 'Error in creating rental:', error )
+        res.status(500).json({ message: 'Internal Server Error' })
     }
 }
 
@@ -70,9 +65,15 @@ const viewPropertyRentalsController = async(req, res) => {
 const updatedRentalController = async (req, res) => {
     try {
         const { rentalid } = req.params
+        const { telephone, email } = req.body
+        const updatedRental = await updateRental(rentalid, telephone, email)
 
-        await updateRental(rentalid, telephone, email)
-    }
+        if(!updatedRental){
+            return res.status(500).json({ message: 'Failed to update rental' })
+        }
+
+            res.status(200).json({ updatedRental, message: 'Booking details updated' })
+        }
     catch(error) {
         console.error('Error in updating rental details: ', error)
         res.status(500).json({ message: 'Internal Server Error' })

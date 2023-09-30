@@ -1,18 +1,20 @@
-import conn from '../db.mjs'
+import conn from '../config/DB.mjs'
 
 /*--------------------------------Create a rental ------------------------------------*/
-const createRental = async(propertyId, firstname, lastname, telephone, email) => {
+const createRental = async(firstname, lastname, telephone, email, fromdate, todate, propertyid) => {
     try {
         const createRentalQuery = `INSERT INTO 
-            rental (firstname, lastname, telephone, email)
-            VALUES ($1, $2, $3, $4, $5, $6);`;
-        const rentalValues = [firstname, lastname, telephone, email];
-        const result = await conn.query(createRentalQuery, rentalValues);
+            rental (firstname, lastname, telephone, email, fromdate, todate, propertyid)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING rentalid;`
+        const rentalValues = [firstname, lastname, telephone, email, fromdate, todate, propertyid]
+        const result = await conn.query(createRentalQuery, rentalValues)
     
-        return result.rows[0].rentalid;
+        return result.rows[0]
     } 
     catch (error) {
-        throw error;
+        console.error('Error creating rental:', error)
+        throw error
     }
 }
 
@@ -25,9 +27,9 @@ const viewRental = async(rentalid) => {
                 r.telephone,
                 r.email,
                 p.name,
-                p.description
-                p.location
-                p.price
+                p.description,
+                p.location,
+                p.price,
                 p.number_of_rooms
             FROM 
                 rental r 
@@ -61,9 +63,9 @@ const viewPropertyRentals = async(propertyid) => {
             FROM rental
             WHERE propertyid = $1;`
         const viewPropertyRentalsvalues = [propertyid]
-        const viewPropertyRentalsresult = await conn.query(query, values)
+        const viewPropertyRentalsresult = await conn.query(viewPropertyRentalsquery, viewPropertyRentalsvalues)
         
-        return result.rows
+        return viewPropertyRentalsresult.rows
     }
     catch (error) {
         throw error
@@ -71,15 +73,22 @@ const viewPropertyRentals = async(propertyid) => {
 }
 
 /*--------------------- update rental details ---------------------*/
-const updateRental = async(telephone, email) => {
+const updateRental = async(rentalid, telephone, email) => {
     try {
         const updateRentalquery = `UPDATE rental
             SET 
-                telephone =$1,
-                email = $2
-            WHERE rentalid = $1;`
-        const updateRentalvalues = [telephone, email]
-        await conn.query(updateRetalquery, updateRentalvalues)
+                telephone =$2,
+                email = $3
+            WHERE rentalid = $1
+            RETURNING *;`
+        const updateRentalvalues = [rentalid, telephone, email]
+        const result = await conn.query(updateRentalquery, updateRentalvalues)
+
+        if (result.rowCount === 1) {
+            return result.rows[0]
+        } else {
+            return null
+        }
     }
     catch(error) {
         throw error

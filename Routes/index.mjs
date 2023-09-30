@@ -11,4 +11,9 @@ router.use('/admin', adminRouter)
 import propertyRouter from './propertyRoutes.mjs'
 router.use('/property', propertyRouter)
 
+
+/*------------------------------------------------ For rental routes ----------------------------------------------*/
+import rentalRouter from './rentalRoutes.mjs'
+router.use('/rental', rentalRouter)
+
 export default router

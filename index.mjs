@@ -24,6 +24,8 @@ app.use(cors(corsOptions))
 app.use("/", indexRouter)
 
 
+
+
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`)
   }

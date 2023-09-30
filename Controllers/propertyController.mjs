@@ -42,7 +42,7 @@ const addNewProperty = async(req, res) => {
         const { adminid } = req.user
 
         //add the property
-        const property = await addProperty(location, name, description, price, adminid, property_type, number_of_rooms, images)
+        const property = await addProperty(location, name, description, price, property_type, number_of_rooms, adminid, images)
 
         if(!property) {
             return res.status(500).json({ message: 'Failed to add property' })
@@ -78,7 +78,7 @@ const updatePropertydetails = async(req, res) => {
             return res.status(500).json({ message: 'Failed to update property' })
         }
 
-        res.status(200).json({ updatedProperty, message: 'property updated' });
+        res.status(200).json({ updatedProperty, message: 'property updated' })
 
     }
     catch (error) {
