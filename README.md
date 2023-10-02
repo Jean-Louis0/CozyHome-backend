@@ -14,3 +14,6 @@ CozyHome acts as a bridge, connecting eager travelers, with welcoming hosts.
 For clients, finding the ideal home-away-from-home is just a click away. 
 For owners, managing properties and maximizing revenue has never been more straightforward.
 
+## Deployment
+The live deployment of this API is on the following URL: https://cozyhome.onrender.com/
+
