@@ -42,3 +42,47 @@ Are you encountering issues? or do you want to give us some advice?
   https://www.linkedin.com/in/largoleslie/ or https://www.linkedin.com/in/jean-louis-girishaka/
 ### ----------------------------------------------------------------------------------------------------------------------- ###
 ## Let's explore it 🚀🔍💻!!
+
+### Routes
+
+1. For clients
+
+     To rent a property (post request, the user will have to add: firstname, lastname, telephone, email, check-in, check-out dates)
+       rental/:propertyid 
+
+      To view the booking details(Get request)
+        rental/:rentalid
+
+      To update the booking details(put request, user can only update: the telephone and the email)
+        rental/:rentalid
+       To view all properties (Get)
+         /property/properties
+   
+2. For Host
+
+        To view property details by property id (Get)
+          property/:propertyid (1,12, 16, 17, 10)
+
+        To add a property (post: requires a token) 
+          /property
+
+         To update a property (post: requires a token) 
+           /property/:propertyid 
+
+          To delete a property (post: requires a token) 
+            /property/:propertyid
+
+          To view rental details associated to property details (post: requires a token) 
+             /viewpropertyandrentaldetails/:propertyid
+
+          To login for admin, requires a token(post)
+             /admin/login
+
+          To register for admin, requires a token(post)
+             /admin/register
+
+          To update admin credentials, requires a token(post)
+             /update/:adminid
+
+           to view bookings associated with one property (get request for admin, requires a token)
+              rental/property/:propertyid
