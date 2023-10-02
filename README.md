@@ -21,5 +21,17 @@ The live deployment of this API is on the following URL: https://cozyhome.onrend
 ## Start The Journey!!
 
 1. clone this repository to your local machine.
-       Open your terminal or cmd and run ```git clone https://github.com/your-username/CozyHome.git```
+       Open your terminal or cmd and run: 
+       ```git clone https://github.com/your-username/CozyHome.git```
 
+2. Navigate to the project directory using the `cd` command:
+      ```cd CozyHome-backend```
+
+3. Install the required dependencies. (Make sure you have Node.js and npm (Node Package Manager) installed. If you don't have them, you can download and install them from nodejs.org)
+     then run:
+      ```npm install```
+
+4. Once you have installed all the dependencies; then run:
+      ```npm run dev```
+    This will start the development server, and you should see output indicating that the server is running. 
+You can now access CozyHome in your browser at http://localhost:3200.
