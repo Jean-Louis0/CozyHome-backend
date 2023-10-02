@@ -35,3 +35,8 @@ The live deployment of this API is on the following URL: https://cozyhome.onrend
       ```npm run dev```
     This will start the development server, and you should see output indicating that the server is running. 
 You can now access CozyHome in your browser at http://localhost:3200.
+
+## Contact
+Are you encountering issues? or do you want to give us some advice?
+ Feel free to reach out to us via our linkedin accounts: 
+  https://www.linkedin.com/in/largoleslie/ or https://www.linkedin.com/in/jean-louis-girishaka/
