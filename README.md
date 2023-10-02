@@ -40,5 +40,5 @@ You can now access CozyHome in your browser at http://localhost:3200.
 Are you encountering issues? or do you want to give us some advice?
  Feel free to reach out to us via our linkedin accounts: 
   https://www.linkedin.com/in/largoleslie/ or https://www.linkedin.com/in/jean-louis-girishaka/
-### --------------------------------------------------------------------------------------------------------------------------------###
+### ---------------------------------------------------------------------------------------------------------------------------- ###
 ## Let's explore it 🚀🔍💻!!
