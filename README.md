@@ -58,7 +58,6 @@ Are you encountering issues? or do you want to give us some advice?
         rental/:rentalid
        To view all properties (Get)
          /property/properties
-    ```
    
 2. For Host
 
