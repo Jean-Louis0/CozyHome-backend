@@ -17,3 +17,9 @@ For owners, managing properties and maximizing revenue has never been more strai
 ## Deployment
 The live deployment of this API is on the following URL: https://cozyhome.onrender.com/
 
+
+## Start The Journey!!
+
+1. clone this repository to your local machine.
+       Open your terminal or cmd and run ```git clone https://github.com/your-username/CozyHome.git```
+
