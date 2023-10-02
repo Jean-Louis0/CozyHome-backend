@@ -47,7 +47,8 @@ Are you encountering issues? or do you want to give us some advice?
 
 1. For clients
 
-     ```To rent a property (post request, the user will have to add: firstname, lastname, telephone, email, check-in, check-out dates)
+     ````
+      To rent a property (post request, the user will have to add: firstname, lastname, telephone, email, check-in, check-out dates)
        rental/:propertyid 
 
       To view the booking details(Get request)
@@ -56,7 +57,8 @@ Are you encountering issues? or do you want to give us some advice?
       To update the booking details(put request, user can only update: the telephone and the email)
         rental/:rentalid
        To view all properties (Get)
-         /property/properties```
+         /property/properties
+    ```
    
 2. For Host
 
